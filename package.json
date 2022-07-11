@@ -1,0 +1,20 @@
+{
+  "name": "consola",
+  "version": "1.0.0",
+  "description": "I made a cool package :)",
+  "main": "index.js",
+  "scripts": {
+    "test": "deno run test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aledlb8/consola.git"
+  },
+  "keywords": [],
+  "author": "aledlb8",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aledlb8/consola/issues"
+  },
+  "homepage": "https://github.com/aledlb8/consola#readme"
+}
