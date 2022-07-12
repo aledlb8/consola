@@ -32,7 +32,7 @@ const consola = {
          * @example consola.log("Hello World");
          */
         
-        console.log(message||"");
+        console.log(message || "");
     },
     success: function(message?: any, type?: string): void {
         /**
