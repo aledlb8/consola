@@ -1,7 +1,7 @@
 {
   "name": "consola",
   "version": "1.0.0",
-  "description": "I made a cool package :)",
+  "description": "I made a cool package with ts deno",
   "main": "index.js",
   "scripts": {
     "test": "deno run test.ts"
