@@ -145,6 +145,7 @@ const consola = {
          * @returns {void}
          * @example consola.clear();
          */
+        
         console.clear();
     },
 };
