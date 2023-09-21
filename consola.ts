@@ -1,109 +1,53 @@
-type Color = {
-  reset: string;
-  black: string;
-  red: string;
-  green: string;
-  yellow: string;
-  blue: string;
-  magenta: string;
-  cyan: string;
-  white: string;
-  grey: string;
-  backgroundBlack: string;
-  backgroundRed: string;
-  backgroundGreen: string;
-  backgroundYellow: string;
-  backgroundBlue: string;
-  backgroundMagenta: string;
-  backgroundCyan: string;
-  backgroundWhite: string;
-  backgroundGrey: string;
-};
-
-const color: Color = {
-  reset: "\x1b[0m",
-  black: "\x1b[30m",
-  red: "\x1b[31m",
-  green: "\x1b[32m",
-  yellow: "\x1b[33m",
-  blue: "\x1b[34m",
-  magenta: "\x1b[35m",
-  cyan: "\x1b[36m",
-  white: "\x1b[37m",
-  grey: "\x1b[90m",
-  backgroundBlack: "\x1b[40m",
-  backgroundRed: "\x1b[41m",
-  backgroundGreen: "\x1b[42m",
-  backgroundYellow: "\x1b[43m",
-  backgroundBlue: "\x1b[44m",
-  backgroundMagenta: "\x1b[45m",
-  backgroundCyan: "\x1b[46m",
-  backgroundWhite: "\x1b[47m",
-  backgroundGrey: "\x1b[100m",
-};
-
-type Sources = {
-  text: string;
-  background: string;
-  icon: string;
-};
-
-type MessageType = "text" | "background" | "icon";
-
-function printMessage(type: string, sources: Sources, message: string) {
-  const source = sources[type];
-  if (source) {
-    console.log(`${source} ${message}${color.reset}`);
-  } else {
-    throw new TypeError("missing parameters.");
-  }
+enum TextColor {
+  Reset = "\x1b[0m",
+  Black = "\x1b[30m",
+  Red = "\x1b[31m",
+  Green = "\x1b[32m",
+  Yellow = "\x1b[33m",
+  Blue = "\x1b[34m",
+  Magenta = "\x1b[35m",
+  Cyan = "\x1b[36m",
+  White = "\x1b[37m",
+  Grey = "\x1b[90m",
 }
 
-const Consola = {
-  success(type: MessageType = "text", message: any) {
-    const sources: Sources = {
-      text: `${color.white}[${color.green}SUCCESS${color.white}]`,
-      background: `${color.backgroundGreen}SUCCESS`,
-      icon: `${color.green}✔`,
-    };
-    printMessage(type, sources, message);
-  },
+enum BackgroundColor {
+  Black = "\x1b[40m",
+  Red = "\x1b[41m",
+  Green = "\x1b[42m",
+  Yellow = "\x1b[43m",
+  Blue = "\x1b[44m",
+  Magenta = "\x1b[45m",
+  Cyan = "\x1b[46m",
+  White = "\x1b[47m",
+  Grey = "\x1b[100m",
+}
 
-  error(type: MessageType = "text", message: any) {
-    const sources: Sources = {
-      text: `${color.white}[${color.red}ERROR${color.white}]`,
-      background: `${color.backgroundRed}ERROR`,
-      icon: `${color.red}✖`,
-    };
-    printMessage(type, sources, message);
-  },
+function getCurrentTime(): string {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, "0");
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+  const seconds = now.getSeconds().toString().padStart(2, "0");
+  return `${TextColor.White}[${TextColor.Cyan}${hours}${TextColor.White}:${TextColor.Cyan}${minutes}${TextColor.White}:${TextColor.Cyan}${seconds}${TextColor.White}]${TextColor.Reset}`;
+}
 
-  warn(type: MessageType = "text", message: any) {
-    const sources: Sources = {
-      text: `${color.white}[${color.yellow}WARN${color.white}]`,
-      background: `${color.backgroundYellow}WARN`,
-      icon: `${color.yellow}⚠`,
-    };
-    printMessage(type, sources, message);
-  },
+interface Logger {
+  (message?: any): void;
+}
 
-  info(type: MessageType = "text", message: any) {
-    const sources: Sources = {
-      text: `${color.white}[${color.blue}INFO${color.white}]`,
-      background: `${color.backgroundBlue}INFO`,
-      icon: `${color.blue}✖`,
-    };
-    printMessage(type, sources, message);
-  },
-
-  debug(type: MessageType = "text", message: any) {
-    const sources: Sources = {
-      text: `${color.white}[${color.grey}DEBUG${color.white}]`,
-      background: `${color.backgroundGrey}DEBUG`,
-      icon: `${color.grey}#`,
-    };
-    printMessage(type, sources, message);
-  },
+const createLogger = (level: string, color: TextColor): Logger => {
+  return (message?: any): void => {
+    const text = `${getCurrentTime()} ${TextColor.White}[${color}${level}${TextColor.White}] ${TextColor.Reset}${message !== undefined ? message : ' '}`;
+    console.log(text);
+  };
 };
 
-export default Consola;
+const consola = {
+  success: createLogger("SUCCESS", TextColor.Green),
+  error: createLogger("ERROR", TextColor.Red),
+  warn: createLogger("WARN", TextColor.Yellow),
+  info: createLogger("INFO", TextColor.Blue),
+  debug: createLogger("DEBUG", TextColor.Grey),
+};
+
+export default consola;
