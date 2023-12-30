@@ -32,13 +32,15 @@ function getCurrentTime(): string {
 }
 
 interface Logger {
-  (message?: any): void;
+  (message: string, ...optionalParams: never[]): void;
 }
 
 const createLogger = (level: string, color: TextColor): Logger => {
-  return (message?: any): void => {
-    const text = `${getCurrentTime()} ${TextColor.White}[${color}${level}${TextColor.White}] ${TextColor.Reset}${message !== undefined ? message : ' '}`;
-    console.log(text);
+  return (message?: string, ...optionalParams: never[]): void => {
+    const text: string = `${getCurrentTime()} ${TextColor.White}[${color}${level}${TextColor.White}] ${TextColor.Reset}${message !== undefined ? message : ' '}`
+    console.log(text, ...optionalParams);
+
+    FileManager.writeFile('logs.txt', `${text}\n`);
   };
 };
 
